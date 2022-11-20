@@ -19,17 +19,21 @@ contract SpendDAO is
 
     Counters.Counter private _tokenIdCounter;
 
+    mapping(address => uint256[]) public ownerToTokenIds;
+    
     constructor() ERC721("Spend DAO", "SPN") {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://ccdao.mypinata.cloud";
+        return "https://ccdao.mypinata.cloud/ipfs/";
     }
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
-        _safeMint(to, tokenId);
+
+        _mint(to, tokenId); // safeMint is not currently supported by on FVM
         _setTokenURI(tokenId, uri);
+        ownerToTokenIds[to].push(tokenId);
     }
 
     // The following functions are overrides required by Solidity.
@@ -49,7 +53,8 @@ contract SpendDAO is
     function _burn(uint256 tokenId)
         internal
         override(ERC721, ERC721URIStorage)
-    {
+    {        
+        // delete ownerToTokenIds[msg.sender][tokenId];
         super._burn(tokenId);
     }
 
