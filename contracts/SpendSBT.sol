@@ -21,13 +21,15 @@ contract SpendSBT is
 
     mapping(address => uint256[]) public ownerToTokenIds;
     
-    constructor() ERC721("Spend DAO", "SPN") {}
+    constructor() ERC721("Spend DAO", "SPN") {
+        safeMint(msg.sender, '');
+    }
 
     function _baseURI() internal pure override returns (string memory) {
         return "https://ccdao.mypinata.cloud/ipfs/";
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri) public {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
 

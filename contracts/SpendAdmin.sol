@@ -14,7 +14,9 @@ contract SpendAdmin is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Own
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("SpendAdmin", "SPTA") {}
+    constructor() ERC721("SpendAdmin", "SPTA") {
+        safeMint(msg.sender, '');
+    }
 
     function _baseURI() internal pure override returns (string memory) {
         return "https://ccdao.mypinata.cloud/ipfs/";
