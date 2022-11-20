@@ -21,6 +21,8 @@ contract SpendSBT is
 
     mapping(address => uint256[]) public ownerToTokenIds;
     
+    string[] public cidList;
+    
     constructor() ERC721("Spend DAO", "SPN") {
         safeMint(msg.sender, '');
     }
@@ -35,11 +37,21 @@ contract SpendSBT is
 
         _mint(to, tokenId); // safeMint is not currently supported by on FVM
         _setTokenURI(tokenId, uri);
+
         ownerToTokenIds[to].push(tokenId);
+        cidList.push(uri);
+    }
+
+    function totalSupply() public view override returns (uint256) {
+        return _tokenIdCounter.current();
+    }
+
+    function userBurn(uint id) public {
+        require(ownerOf(id) == msg.sender, "You do not own this token");
+        _burn(id);
     }
 
     // The following functions are overrides required by Solidity.
-
     function _beforeTokenTransfer(
         address from,
         address to,

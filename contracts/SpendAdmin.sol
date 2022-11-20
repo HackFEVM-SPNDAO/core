@@ -55,6 +55,10 @@ contract SpendAdmin is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Own
         super._burn(tokenId);
     }
 
+    function totalSupply() public view override returns (uint256) {
+        return _tokenIdCounter.current();
+    }
+
     function tokenURI(uint256 tokenId)
         public
         view
